@@ -1,15 +1,17 @@
-/* src/App.css */
+/* App container styling */
 .App {
   text-align: center;
   padding: 20px;
 }
 
+/* Header styling */
 header {
   background-color: #282c34;
   padding: 20px;
   color: white;
 }
 
+/* Footer styling */
 footer {
   background-color: #282c34;
   padding: 10px;
@@ -19,35 +21,73 @@ footer {
   width: 100%;
 }
 
+/* Recipe list container */
 .recipe-list {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* Individual recipe card styling */
 .recipe {
   border: 1px solid #ccc;
   padding: 20px;
   margin: 10px;
   width: 300px;
   text-align: left;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Form styling */
 form {
   margin: 20px;
 }
 
+/* Input and textarea styling */
 input, textarea {
   display: block;
   margin: 10px 0;
   padding: 10px;
   width: 100%;
   box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
+/* Button styling */
 button {
   padding: 10px 20px;
   background-color: #61dafb;
   border: none;
   cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #21a1f1;
+}
+
+/* Search bar styling */
+.search-bar {
+  padding: 10px;
+  width: 300px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .recipe {
+    width: 90%;
+  }
+
+  .search-bar {
+    width: 90%;
+  }
 }
