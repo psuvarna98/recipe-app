@@ -1,55 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';  
 import Header from './components/Header';
 import Footer from './components/Footer';
+import EditRecipe from './components/EditRecipe';
 import RecipeList from './components/RecipeList';
 import AddRecipe from './components/AddRecipe';
-import EditRecipe from './components/EditRecipe';
 import './App.css';
 
-// Functional component called App
+
+
 function App() {
-  // State for recipes and search query
   const [recipes, setRecipes] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(''); // New state for search
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Function to add a new recipe
+  // Add a new recipe
   const addRecipe = (name, description) => {
     const newRecipe = {
-      id: Date.now(), // Unique ID based on current time
+      id: Date.now(),
       name,
       description,
     };
-    setRecipes([...recipes, newRecipe]); // Add new recipe to recipes state
+    setRecipes([...recipes, newRecipe]);
   };
 
-  // Function to delete a recipe by ID
+  // Delete a recipe by ID
   const deleteRecipe = (id) => {
-    setRecipes(recipes.filter((recipe) => recipe.id !== id)); // Remove recipe with matching ID
+    setRecipes(recipes.filter((recipe) => recipe.id !== id));
   };
 
-  // Function editing a recipe by index, changing the name and description
+  // When clicking edit, set the editIndex
   const editRecipeClick = (index) => {
     setEditIndex(index);
   };
 
+  // Handle saving the edited recipe
   const handleSaveRecipeEdit = (index, name, description) => {
-    const newRecipes = recipes.map((recipe, i) => {
+    const updatedRecipes = recipes.map((recipe, i) => {
       if (i === index) {
         return { id: recipe.id, name, description };
       }
       return recipe;
     });
-    setRecipes(newRecipes);
-    setEditIndex(null); // Reset edit index
+    
+    setRecipes(updatedRecipes);
+    setEditIndex(null); // Exit edit mode after saving
   };
 
-  // Function to handle search input change
+  // Handle search input
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  // Filtered recipes based on the search query
+  // Filter recipes based on search query
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -58,7 +60,7 @@ function App() {
     <div className="App">
       <Header />
 
-      {/* Add Search Input */}
+      {/* Full-width search bar */}
       <input
         type="text"
         placeholder="Search recipes..."
@@ -67,30 +69,46 @@ function App() {
         className="search-bar"
       />
 
-      <AddRecipe addRecipe={addRecipe} />
+      {/* Main content: two columns */}
+      <div className="main-content">
+        {/* Left Column: Add new recipe */}
+        <div className="left-column">
+          <h2>Add New Recipe</h2> {/* Title for the left column */}
+          <div className="add-recipe-container">
+            <AddRecipe addRecipe={addRecipe} />
+          </div>
+        </div>
 
-      {/* Show recipe editing form if editIndex is not null, otherwise show recipe list */}
-      {editIndex !== null ? (
-        <EditRecipe
-          index={editIndex}
-          setEditIndex={setEditIndex}
-          recipes={recipes}
-          setRecipes={setRecipes}
-        />
-      ) : (
-        <RecipeList
-          recipes={filteredRecipes} // Use filtered recipes
-          deleteRecipe={deleteRecipe}
-          editRecipeClick={editRecipeClick} // Passing the edit function
-          handleSaveRecipeEdit={handleSaveRecipeEdit} // Passing the save function
-          editIndex={editIndex} // Passing the edit index
-        />
-      )}
+        {/* Right Column: Display added recipes */}
+        <div className="right-column">
+          <h2>Recipe List</h2> {/* Title for the right column */}
 
+          {/* Show 'No recipes found' if search result is empty */}
+          {filteredRecipes.length === 0 ? (
+            <p>No recipes found for "{searchQuery}"</p>
+          ) : (
+            <RecipeList
+              recipes={filteredRecipes}
+              deleteRecipe={deleteRecipe}
+              editRecipeClick={editRecipeClick}
+            />
+          )}
+
+           {editIndex !== null && (
+            <div className="edit-recipe-box">
+              <EditRecipe
+                recipe={recipes[editIndex]} // Pass the specific recipe to edit
+                handleSaveRecipeEdit={handleSaveRecipeEdit}
+                index={editIndex} // Pass the index for updating the correct recipe
+                setEditIndex={setEditIndex} // To reset the editing mode
+              />
+            </div>
+          )}
+        </div>
+      </div>
       <Footer />
     </div>
   );
 }
 
-// Exporting the App component to use it in other parts of the app
 export default App;
